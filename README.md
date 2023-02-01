@@ -44,15 +44,15 @@ so we have a couple parts to this
 
 # Data buckets
 mr stack wants me to analyze
-- total subscribers (historical or not)
-- total videos
-- age of account
-- how many accounts they are following
-- video length
-- number of likes
-- number of comments
-- comments themselves
-- transcripts
+- [x] total subscribers (historical or not)
+- [x] total videos
+- [x] age of account
+- [M] how many accounts they are following (Not posible most are private)
+- [x] video length
+- [x] number of likes
+- [x] number of comments
+- [x] comments themselves
+- [X] transcripts (using a method of undocumneted API) [its legal](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjp3NXLx_L8AhWPnokEHSzCALMQFnoECBUQAw&url=https%3A%2F%2Fresearch.aimultiple.com%2Fscraping-youtube%2F&usg=AOvVaw2Es6fchzqR6aNXUtHnHnP7)
 
 what I can do/want to do
 sentiment analisis
