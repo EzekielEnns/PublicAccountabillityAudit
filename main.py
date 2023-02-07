@@ -1,4 +1,4 @@
-from pickle import HIGHEST_PROTOCOL, dumps, loads
+from typing import cast
 import h5py;
 from dataclasses import dataclass
 import numpy
@@ -76,10 +76,18 @@ dChannel = numpy.dtype([
 f = h5py.File("data.hdf5", "w")
 root = f.create_group('root')
 newData = numpy.array([('id','hello-World','asd','123','asdasd','1231','asd','cloe',100,100,100)],dtype=dChannel)
-test = root.create_dataset('Channels',data=newData)
+test = root.create_dataset('Channels',data=newData,compression="gzip",chunks=True,maxshape=(None,))
+newData2 = numpy.array([('id1','World','asdz','123z','asdasd','1231z','asdz','zeek',100,100,100)],dtype=dChannel)
 
 print(test.shape[0])
 print(test[0]['keywords'])
+cast(h5py.Dataset, root["Channels"]).resize( (newData.shape[0] + newData2.shape[0]) ,axis = 0 )
+cast(h5py.Dataset,root["Channels"])[-newData2.shape[0]:] = newData2
+
+
+print(test.shape[0])
+print(test[1]['keywords'].decode("utf-8"))
+
 
 
 
