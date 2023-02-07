@@ -73,25 +73,49 @@ dChannel = numpy.dtype([
     ("viewCount",numpy.uint32),
 ])
 #so this is a unstable way to get them #test = YouTubeTranscriptApi.get_transcript('T1MWP87Hdk4')
-f = h5py.File("data.hdf5", "w")
-root = f.create_group('root')
-newData = numpy.array([('id','hello-World','asd','123','asdasd','1231','asd','cloe',100,100,100)],dtype=dChannel)
-test = root.create_dataset('Channels',data=newData,compression="gzip",chunks=True,maxshape=(None,))
+root = h5py.File("data.hdf5", "w")
+#root = f.create_group('root')
+newData = numpy.array([('','','','','','','','',0,0,0)],dtype=dChannel)
+test = root.create_dataset('Channels',(20,), dtype=dChannel,chunks=True)
+#test = root.create_dataset('Channels',data=newData,compression="gzip",chunks=True,maxshape=(None,))
 newData2 = numpy.array([('id1','World','asdz','123z','asdasd','1231z','asdz','zeek',100,100,100)],dtype=dChannel)
 
 print(test.shape[0])
-print(test[0]['keywords'])
-cast(h5py.Dataset, root["Channels"]).resize( (newData.shape[0] + newData2.shape[0]) ,axis = 0 )
-cast(h5py.Dataset,root["Channels"])[-newData2.shape[0]:] = newData2
-
-
+print(test[0]['id'] != b'')
+print(bool(test[0]['id']))
+for i in range(20):
+    cast(h5py.Dataset, root["Channels"])[i] = newData2
+    root.flush()
 print(test.shape[0])
-print(test[1]['keywords'].decode("utf-8"))
+print(test[19]['keywords'].decode("utf-8"))
 
-
-
+import csv
+with open("Public Accountability Audits - YouTube Accounts.csv",newline='') as csvfile:
+    # open the hdf5 file 
+    # check for channels Dataset
+    # get last index from hdf5 file
+    spamreader = csv.DictReader(csvfile,delimiter=',', quotechar='|')
+    count = 0
+    for row in spamreader:
+        search = row['Account Name']
+        # api call to get search....
+        # address api erros (mark as error)
+        # do a channel fetch 
+        # address errors (mark as error)
+        #store into hdf5
+        #save hdf5
+        count+=1
+        #repreat
 
 exit(0)
+
+with open('employee_file2.csv', mode='w') as csv_file:
+    fieldnames = ['emp_name', 'dept', 'birth_month']
+    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+    writer.writeheader()
+    writer.writerow({'emp_name': 'John Smith', 'dept': 'Accounting', 'birth_month': 'November'})
+    writer.writerow({'emp_name': 'Erica Meyers', 'dept': 'IT', 'birth_month': 'March'})
 
 SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl']
 SERVICE_ACCOUNT_FILE = './creds.json'
