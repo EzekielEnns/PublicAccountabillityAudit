@@ -1,3 +1,4 @@
+import enum
 import h5py as h5;
 from csv import DictReader
 
@@ -26,14 +27,15 @@ with h5.File("PAAProject.hdf5", "w") as hFile,open(csvName,newline='') as csvFil
     if not channels:
         channels = hFile.create_dataset('Channels',(20,),dtype=dChannel,chunks=True)
         hFile.flush()
-    if channels[20]["id"]:
-        exit(0) # data phase finished
+    #TODO make this clean
+    if channels[19]["id"]: 
+        print("finished collecting channels")
+        exit(0) 
 
-    #TODO get to current index
-    index = 0;
-    for row in csvReader:
-
+    for (index,row) in enumerate(csvReader):
+        if channels[index]["id"]: continue;
         search = row['Account Name']
+
         try:
             req = yt.search().list(
                 part="snippet",
@@ -43,22 +45,39 @@ with h5.File("PAAProject.hdf5", "w") as hFile,open(csvName,newline='') as csvFil
             )
             res = req.execute()
             #TODO make sure we got something 
+            id = res['items'][0]["snippet"]["channelId"]
             
             req = yt.channels().list(
-                    part="snippet,contentDetails,statistics",
+                    part="snippet,contentDetails,statistics,topicDetails",
                     id=str(res["items"][0]["id"])
             )
             res = req.execute()
+            
+            channel = res['items'][0]
+            test = ','.join(channel['topicDetails']['topicCategories'])
+            
             #TODO save all data 
-            channels[index] = array([()],dtype=dChannel)
-            # final clean up
+            channels[index] = array([
+                (channel['id']),
+                (channel['snippet']['title']),
+                (channel['snippet']['publishedAt']),
+                (channel['snippet']['description']),
+                (channel['contentDetails']['relatedPlaylists']
+                    ['uploads']),
+                (channel['contentDetails']['relatedPlaylists']
+                    ['likes']),
+                (','.join(channel['topicDetails']['topicCategories'])),
+                (channel['statistics']['subscriberCount']),
+                (channel['statistics']['videoCount']),
+                (channel['statistics']['viewCount']),
+                ],dtype=dChannel)
             hFile.flush()
-            index += 1
-
+            
         except HttpError as err:
-            #TODO
-            print()
+            print(search)
+            if err.resp.status in [403,500,503]:
+                print('re try later')
+            else: raise
         except:
-            #TODO
-            print()
-# helpers
+            print(search)
+            raise

@@ -7,8 +7,7 @@ dChannel = dtype([
     ("description","S1000"),
     ("uploadsId","S30"),
     ("likesId","S30"),
-    ("topics","S70"),
-    ("keywords","S500"),
+    ("topics","S200"),
     ("subCount",uint32), # over kill I know
     ("videoCount",uint32),
     ("viewCount",uint32),

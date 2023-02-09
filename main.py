@@ -57,6 +57,24 @@ class Video:
     location:str #recordingDetails.location
     comments:set[Comment] # populated
 
+@dataclass
+class ChannelTotals:
+    subs:int #statistics.subscriberCount
+    videos:int #statistics.videoCount
+    views:int #statistics.viewCount
+@dataclass
+class Channel:
+    id:str
+    name:str #snippet.title
+    publishedAt:str #snippet.publishedAt
+    description:str #snippet.description
+    uploadsId:str #contentDetails.relatedPlaylists.uploads
+    likesID:str #contentDetails.relatedPlaylists.likes
+    favoritesID:str #contentDetails.relatedPlaylists.favorites
+    topics:set[str] #topicDetails.topicCategories
+    keywords:str #brandingSettings.channel.keywords
+    counts:ChannelTotals
+    videos:set[Video] #populated
 # phase 1
 dChannel = numpy.dtype([
 #https://developers.google.com/youtube/v3/docs/channels#resource-representation
