@@ -1,3 +1,18 @@
+# notes from meeting 230209
+basic channel phase 1 is good
+include date of capture for stats
+
+you need a description of the ai and how it works
+- include limitations and stuff like that
+
+"doxx" them find there location/name
+logistical regression -> urban people or urban 
+
+the issue was that this involes tech -> there is info we wanna get and tech exists to 
+build a tool build this efficently 
+
+in audtining people do a bunch of work you end up with a report 
+
 
 # directory structure
 ```
