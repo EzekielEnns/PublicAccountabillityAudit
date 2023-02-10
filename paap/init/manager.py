@@ -17,13 +17,13 @@ def handleError(e:Exception):
 
 #goole init
 SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl']
-SERVICE_ACCOUNT_FILE = './creds.json'
+SERVICE_ACCOUNT_FILE = '../../creds.json'
 cred = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 api_service_name = "youtube"
 api_version = "v3"
 yt = googleapiclient.discovery.build(api_service_name,api_version,credentials=cred)
 
-csvName ="Public Accountability Audits - YouTube Accounts.csv"
+csvName ="../../resources/Public Accountability Audits - YouTube Accounts.csv"
 with h5.File("PAAProject.hdf5", "w") as hFile,open(csvName,newline='') as csvFile:
     csvReader = DictReader(csvFile,delimiter=',', quotechar='|')
     channels = cast(h5.Dataset,hFile["Channels"])
