@@ -10,8 +10,8 @@ dChannel = dtype([
     ("uploadsId","S30"),
     ("likesId","S30"),
     ("topics","S200"),
-    ("subCount",uint32), 
-    ("videoCount",uint32),
-    ("viewCount",uint32),
+    ("subCount",'S10'), 
+    ("videoCount",'S10'),
+    ("viewCount",'S10'),
     ("fetchdate","S26")
 ])
