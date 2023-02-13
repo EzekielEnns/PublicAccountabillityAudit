@@ -1,5 +1,4 @@
 from csv import DictReader
-import csv
 import h5py as h5
 from .channels import getChannels
 
@@ -35,7 +34,7 @@ def fetchDataCsv():
     csvName ="./resources/Public Accountability Audits - YouTube Accounts.csv"
     with h5.File("./resources/PAAProject.hdf5", "a") as hFile,open(csvName,newline='') as csvFile:
         csvReader = DictReader(csvFile,delimiter=',', quotechar='|')
-        totalChannelsIndex = 63 #TODO change this to fetch from csv
+        totalChannelsIndex = len(csvFile.readlines())-1; csvFile.seek(0) #TODO change this to fetch from csv
         try: channels = cast(h5.Dataset,hFile["Channels"])
         except:
             channels = hFile.create_dataset('Channels',(totalChannelsIndex,),
@@ -44,17 +43,16 @@ def fetchDataCsv():
         finally:
             if channels.shape[0] < totalChannelsIndex:
                 channels.resize((totalChannelsIndex,))
-            start = -1
+            start = 0
             for i in range(totalChannelsIndex):
                 if channels[i]['id']: start=i
-            if start: print("skipping ",start," entries")
-
+            if start > 0: print("skipping ",start," entries")
             if not channels[totalChannelsIndex]["id"]:
                 for (index, row) in enumerate(getChannels(csvReader,yt,start)):
-                    print('fetched ',row['name'].item().decode())
+                    print(index+start,' fetched ',row['name'].item().decode())
                     if isinstance(row,Exception): handleError(row);
                     else: 
-                        channels[index] = row
+                        channels[index+start] = row
                         hFile.flush()
         #TODO vidoes
         #TODO comments

@@ -3,10 +3,9 @@ from ..types import dChannel
 from numpy import array
 from datetime import datetime
 #lil note for my self arr['name'].item().decode()
-def getChannels(csvReader:DictReader,yt,startIndex:int=-1): 
+def getChannels(csvReader:DictReader,yt,startIndex:int=0): 
     for (index,row) in enumerate(csvReader):
-        if startIndex>0 and startIndex < index: continue;
-
+        if startIndex>0 and index < startIndex: continue;
         search = row['Account Name']
         try:
             req = yt.search().list(
@@ -21,7 +20,7 @@ def getChannels(csvReader:DictReader,yt,startIndex:int=-1):
                     id=str(res["items"][0]["id"]["channelId"])
             )
             res = req.execute()
-
+            
             channel = res['items'][0]
             yield array((
                 (channel['id']),
@@ -32,13 +31,13 @@ def getChannels(csvReader:DictReader,yt,startIndex:int=-1):
                     ['uploads'].encode("ascii", "ignore")),
                 (channel['contentDetails']['relatedPlaylists']
                     ['likes'].encode("ascii", "ignore")),
-                (','.join(channel['topicDetails']['topicCategories'])),
-                (channel['statistics']['subscriberCount']),
-                (channel['statistics']['videoCount']),
-                (channel['statistics']['viewCount']),
+                (','.join(channel['topicDetails']['topicCategories']) if channel.get('topicDetails') 
+                    else 'NA'),
+                ( channel['statistics']['subscriberCount'] if channel.get('statistics') else 'NA'),
+                (channel['statistics']['videoCount'] if channel.get('statistics') else 'NA'),
+                (channel['statistics']['viewCount'] if channel.get('statistics') else 'NA'),
                 (datetime.now().isoformat())
             ),dtype=dChannel)
-
         except Exception as e:
             raise e;
 

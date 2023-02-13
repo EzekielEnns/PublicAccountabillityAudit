@@ -1,6 +1,6 @@
 from numpy import dtype,uint32
 from numpy.core.multiarray import array
-#TODO make a function for typing 
+#TODO make a function for 
 dChannel = dtype([
 #https://developers.google.com/youtube/v3/docs/channels#resource-representation
     ("id","S30"),

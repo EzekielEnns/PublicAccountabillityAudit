@@ -12,6 +12,7 @@ youtube-transcript-api = "*"
 h5py = "*"
 numpy = "*"
 hickle = "*"
+python-dateutil = "*"
 
 [dev-packages]
 pylint = "*"
